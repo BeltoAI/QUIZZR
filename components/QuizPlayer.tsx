@@ -11,13 +11,12 @@ export default function QuizPlayer({ quiz }: { quiz: Quiz }) {
 
   const q = quiz.questions[idx];
   const total = quiz.questions.length;
-
   const progress = useMemo(() => Math.round((idx / total) * 100), [idx, total]);
 
   function submit() {
     if (!selected) return;
-    if (selected === q.correctChoiceId) setScore(s => s + 1);
-    if (idx + 1 < total) { setIdx(i => i + 1); setSelected(null); } else { setDone(true); }
+    if (selected === q.correctChoiceId) setScore((s) => s + 1);
+    if (idx + 1 < total) { setIdx((i) => i + 1); setSelected(null); } else { setDone(true); }
   }
 
   if (done) {
@@ -41,10 +40,10 @@ export default function QuizPlayer({ quiz }: { quiz: Quiz }) {
       </div>
       <div className="mb-4 text-lg font-medium">{q.prompt}</div>
       <div className="grid gap-3">
-        {q.choices.map(c => (
-          <label key={c.id} className={`flex cursor-pointer items-start gap-3 rounded-xl border p-3 ${selected===c.id? 'border-slate-800 bg-slate-50' : 'border-slate-200 hover:border-slate-300'}`}>
-            <input type="radio" className="mt-1" name="choice" checked={selected===c.id} onChange={() => setSelected(c.id)} />
-            <div><div className="font-medium">{c.id}. {c.text}</div></div>
+        {q.choices.map((c) => (
+          <label key={c.id} className={`flex cursor-pointer items-start gap-3 rounded-xl border p-3 ${selected === c.id ? 'border-slate-800 bg-slate-50' : 'border-slate-200 hover:border-slate-300'}`}>
+            <input type="radio" className="mt-1" name="choice" checked={selected === c.id} onChange={() => setSelected(c.id)} />
+            <div className="font-medium">{c.id}. {c.text}</div>
           </label>
         ))}
       </div>
