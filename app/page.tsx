@@ -3,6 +3,32 @@ import dynamic from 'next/dynamic';
 import { useMemo, useState } from 'react';
 import { z } from 'zod';
 import type { Quiz } from '@/lib/types';
+
+const LETTERS = ['A','B','C','D'] as const;
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/** Reorders choices randomly and re-letters them A..D; updates correctChoiceId accordingly */
+function fixQuiz(qz: Quiz): Quiz {
+  const questions = qz.questions.map((q) => {
+    // shuffle by original choice objects
+    const shuffled = shuffle([...q.choices]);
+    // re-letter to A..D after shuffle
+    const relettered = shuffled.map((c, i) => ({ ...c, id: LETTERS[i] }));
+    // find which shuffled item was originally the correct one
+    const idx = shuffled.findIndex(c => c.id === q.correctChoiceId);
+    const newCorrect = LETTERS[idx >= 0 ? idx : 0];
+    return { ...q, choices: relettered, correctChoiceId: newCorrect };
+  });
+  return { ...qz, questions };
+}
+
 import { Card, Button, Input, Label, Select, SectionTitle } from '@/components/UI';
 import { quizToCsv } from '@/utils/csv';
 import { quizToQtiZip } from '@/utils/qti';
