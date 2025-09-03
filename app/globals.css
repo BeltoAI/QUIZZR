@@ -1,0 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light; }
+.skeleton { @apply animate-pulse rounded-xl bg-slate-200; }
